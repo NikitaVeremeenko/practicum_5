@@ -1,0 +1,37 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches:
+      - lab1
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+        npm install
+
+    - name: Install Playwright browsers
+      run: |
+        npx playwright install
+
+    - name: Run tests with Playwright
+      run: |
+        npx playwright test
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
